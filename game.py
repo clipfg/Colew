@@ -47,7 +47,6 @@ def main(scr, data):
         if response == "Нет":
             scr.destroy()
         else:
-            scr.destroy()
             lives = 0
             cmd()
 
@@ -58,7 +57,6 @@ def main(scr, data):
         if response == "Нет":
             scr.destroy()
         else:
-            scr.destroy()
             lives = 0
             cmd()
 
@@ -68,13 +66,12 @@ def main(scr, data):
     lives += 1
     if lives == 5:
         msg = CTkMessagebox(title="Ни рыба, ни мясо окно :/", message="Вы конечно не выиграли, но и не проиграли."
-                                                                      "Хотите сыграть еще раз?",
+                                                                      " Хотите сыграть еще раз?",
                             icon="question", option_1="Да", option_2="Нет")
         response = msg.get()
         if response == "Нет":
             scr.destroy()
         else:
-            scr.destroy()
             lives = 0
             cmd()
 
@@ -82,45 +79,49 @@ def main(scr, data):
 class Window(customtkinter.CTk):
     def __init__(self, btn):
         super().__init__()
+        self.destroy_list = []
+        self.btn_list = btn
 
+    def mod_2(self):
         self.title("Угадай число")
         self.geometry("800x600")
-
         self.frame = customtkinter.CTkFrame(self, fg_color="#303030")
         self.frame.pack(side="bottom", padx=70, pady=(50, 80))
-
         row = 0
         column = 0
-        for i in btn:
-            customtkinter.CTkButton(master=self.frame, text=i, command=lambda x=i: main(self, x),
+        for i in self.btn_list:
+            self.destroy_list.append(customtkinter.CTkButton(master=self.frame, text=i, command=lambda x=i: main(self, x),
                                     font=("Comic Sans MS", 11), width=20,
                                     fg_color="#484848", hover_color="#585858").grid(row=row,
                                                                                     column=column, pady=3,
                                                                                     padx=5, ipady=5, ipadx=53
-                                                                                    if int(i) < 10 else 50)
+                                                                                    if int(i) < 10 else 50))
             column += 1
             if column > 4 or column > 9 or column > 14:
                 column = 0
                 row += 1
 
+    def mod_1(self):
+        self.title("Угадай число")
+        self.geometry("800x600")
+
+        text_1 = customtkinter.CTkLabel(master=self, text="Угадай число", font=("Comic Sans MS", 38))
+        text_1.pack(expand=True)
+
+        btn_1 = customtkinter.CTkButton(master=self, text="Играть", font=("Comic Sans MS", 38), command=cmd)
+        btn_1.pack(expand=True)
+        self.destroy_list = [text_1, btn_1]
+
 
 def cmd():
-    global scr
-    game = Window(btn_list)
-    game.mainloop()
+    global game
+    if len(game.destroy_list) > 0:
+        for i in game.destroy_list:
+            i.destroy()
+    game.mod_2()
 
 
-scr = customtkinter.CTk()
-
-scr.title("Угадай число")
-scr.geometry("800x600")
-
-text_1 = customtkinter.CTkLabel(master=scr, text="Угадай число", font=("Comic Sans MS", 38))
-text_1.pack(expand=True)
-
-btn_1 = customtkinter.CTkButton(master=scr, text="Играть", font=("Comic Sans MS", 38), command=cmd)
-btn_1.pack(expand=True)
-
-scr.mainloop()
-
+game = Window(btn_list)
+game.mod_1()
+game.mainloop()
 
