@@ -1,5 +1,6 @@
 import random
 import customtkinter
+from CTkMessagebox import CTkMessagebox
 
 customtkinter.set_appearance_mode("Dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -9,6 +10,7 @@ numbers_list = [i for i in range(1, 21)]
 win = random.choice(numbers_list)
 btn_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
             "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]
+lives = 0
 
 if win == 1:
     lose = random.choice(numbers_list[1:])
@@ -34,10 +36,52 @@ def numbers_range(r):
             return 20 - r, 20
 
 
+def main(scr, data):
+    global lives, win, lose
+
+    g, m = numbers_range(lives)
+    if data == win:
+        msg = CTkMessagebox(title="Радостное окно)", message="Вы выиграли, хотите сыграть еще раз?",
+                            icon="question", option_1="Да", option_2="Нет")
+        response = msg.get()
+        if response == "Нет":
+            scr.destroy()
+        else:
+            scr.destroy()
+            lives = 0
+            cmd()
+
+    elif data == lose:
+        msg = CTkMessagebox(title="Грустное окно(", message="Вы проиграли, хотите сыграть еще раз?",
+                            icon="question", option_1="Да", option_2="Нет")
+        response = msg.get()
+        if response == "Нет":
+            scr.destroy()
+        else:
+            scr.destroy()
+            lives = 0
+            cmd()
+
+    else:
+        print(f"Ноуноуноу мистер фиш. Попытай удачи в между {g} и {m}")
+
+    lives += 1
+    if lives == 5:
+        msg = CTkMessagebox(title="Ни рыба, ни мясо окно :/", message="Вы конечно не выиграли, но и не проиграли."
+                                                                      "Хотите сыграть еще раз?",
+                            icon="question", option_1="Да", option_2="Нет")
+        response = msg.get()
+        if response == "Нет":
+            scr.destroy()
+        else:
+            scr.destroy()
+            lives = 0
+            cmd()
+
+
 class Window(customtkinter.CTk):
     def __init__(self, btn):
         super().__init__()
-        self.btn = btn
 
         self.title("Угадай число")
         self.geometry("800x600")
@@ -47,48 +91,36 @@ class Window(customtkinter.CTk):
 
         row = 0
         column = 0
-        for i in self.btn:
-            customtkinter.CTkButton(master=self.frame, text=i,
-                                    font=("Comic Sans MS", 11), width=20, fg_color="#484848", hover_color="#585858").grid(row=row,
-                                                                               column=column, pady=3, padx=5,
-                                                                               ipady=5, ipadx=53 if int(i) < 10
-                                                                               else 50)
+        for i in btn:
+            customtkinter.CTkButton(master=self.frame, text=i, command=lambda x=i: main(self, x),
+                                    font=("Comic Sans MS", 11), width=20,
+                                    fg_color="#484848", hover_color="#585858").grid(row=row,
+                                                                                    column=column, pady=3,
+                                                                                    padx=5, ipady=5, ipadx=53
+                                                                                    if int(i) < 10 else 50)
             column += 1
             if column > 4 or column > 9 or column > 14:
                 column = 0
                 row += 1
 
+
 def cmd():
-    global win
+    global scr
     game = Window(btn_list)
-    win.destroy()
     game.mainloop()
 
 
-win = customtkinter.CTk()
+scr = customtkinter.CTk()
 
-win.title("Угадай число")
-win.geometry("800x600")
+scr.title("Угадай число")
+scr.geometry("800x600")
 
-text_1 = customtkinter.CTkLabel(master=win, text="Угадай число", font=("Comic Sans MS", 38))
+text_1 = customtkinter.CTkLabel(master=scr, text="Угадай число", font=("Comic Sans MS", 38))
 text_1.pack(expand=True)
 
-btn_1 = customtkinter.CTkButton(master=win, text="Играть", font=("Comic Sans MS", 38), command=cmd)
+btn_1 = customtkinter.CTkButton(master=scr, text="Играть", font=("Comic Sans MS", 38), command=cmd)
 btn_1.pack(expand=True)
 
-win.mainloop()
+scr.mainloop()
 
 
-# основной цикл
-# for i in range(5):
-#     print(f"Номер попытки: {i+1}")
-#     num = int(input("Число: "))
-#     g, m = numbers_range(i)
-#     if num == win:
-#         print("Ты победил!")
-#         break
-#     elif num == lose:
-#         print("Упс, это было проклятое число народа N")
-#         break
-#     else:
-#         print(f"Ноуноуноу мистер фиш. Попытай удачи в между {g} и {m}")
