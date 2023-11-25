@@ -87,15 +87,16 @@ class Window(customtkinter.CTk):
         self.geometry("800x600")
         self.frame = customtkinter.CTkFrame(self, fg_color="#303030")
         self.frame.pack(side="bottom", padx=70, pady=(50, 80))
+        self.destroy_list.append(self.frame)
         row = 0
         column = 0
         for i in self.btn_list:
-            self.destroy_list.append(customtkinter.CTkButton(master=self.frame, text=i, command=lambda x=i: main(self, x),
+            customtkinter.CTkButton(master=self.frame, text=i, command=lambda x=i: main(self, x),
                                     font=("Comic Sans MS", 11), width=20,
                                     fg_color="#484848", hover_color="#585858").grid(row=row,
                                                                                     column=column, pady=3,
                                                                                     padx=5, ipady=5, ipadx=53
-                                                                                    if int(i) < 10 else 50))
+                                                                                    if int(i) < 10 else 50)
             column += 1
             if column > 4 or column > 9 or column > 14:
                 column = 0
