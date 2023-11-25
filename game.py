@@ -91,7 +91,7 @@ class Window(customtkinter.CTk):
         row = 0
         column = 0
         for i in self.btn_list:
-            customtkinter.CTkButton(master=self.frame, text=i, command=lambda x=i: main(self, x),
+            customtkinter.CTkButton(master=self.frame, text=i, command=lambda x=i: main(self, int(x)),
                                     font=("Comic Sans MS", 11), width=20,
                                     fg_color="#484848", hover_color="#585858").grid(row=row,
                                                                                     column=column, pady=3,
