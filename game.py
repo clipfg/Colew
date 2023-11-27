@@ -1,6 +1,7 @@
+#TODO Добавить фон и музяку (в общем довести дизайн с беты до альфы)
+
 import random
 
-#TODO все исправно, но надо разобраться с итерациями и парами подсказок (ЛОГИКА БЛЯЯЯЯЯЯ)
 import customtkinter
 from CTkMessagebox import CTkMessagebox
 
@@ -29,7 +30,7 @@ def logic():
 # подсказки
 def numbers_range(r):
     global win
-    range_list = [10, 8, 5, 3, 2]
+    range_list = [10, 8, 5, 3, 2, 1]
     r = (range_list[r] - 1)
     if win - r <= 1:
         start = random.randint(1, win)
@@ -53,7 +54,7 @@ def main(scr, data):
         btn.configure(fg_color="green")
         scr.text.configure(text=f"Победа :D")
         msg = CTkMessagebox(title="Радостное окно)", message="Вы выиграли, хотите сыграть еще раз?",
-                            icon="question", option_1="Да", option_2="Нет")
+                            icon="question", option_1="Да", option_2="Нет", button_color="#303030")
         response = msg.get()
         if response == "Нет":
             scr.destroy()
@@ -66,7 +67,7 @@ def main(scr, data):
         btn.configure(fg_color="red")
         scr.text.configure(text=f"Ты проиграл(")
         msg = CTkMessagebox(title="Грустное окно(", message="Вы проиграли, хотите сыграть еще раз?",
-                            icon="question", option_1="Да", option_2="Нет")
+                            icon="question", option_1="Да", option_2="Нет", button_color="#303030")
         response = msg.get()
         if response == "Нет":
             scr.destroy()
@@ -80,11 +81,11 @@ def main(scr, data):
         scr.text.configure(text=f"Не угадал) попробуй найти между {g} и {m}")
 
     lives += 1
-    if lives == 5:
+    if lives == 6:
         scr.text.configure(text="Ты проиграл")
         msg = CTkMessagebox(title="Ни рыба, ни мясо окно :/", message="Вы конечно не выиграли, но и не проиграли."
                                                                       " Хотите сыграть еще раз?",
-                            icon="question", option_1="Да", option_2="Нет")
+                            icon="question", option_1="Да", option_2="Нет", button_color="#303030")
         response = msg.get()
         if response == "Нет":
             scr.destroy()
@@ -101,14 +102,12 @@ class Window(customtkinter.CTk):
         self.btn_list = btn
 
     def mod_2(self):
-        global btns, lives
+        global btns
         self.title("Угадай число")
         self.geometry("800x600")
-        g, m = numbers_range(lives)
-        self.text = customtkinter.CTkLabel(master=self, text=f"1 подсказка: ищи ответ между {g} и {m}",
-                                      font=("Comic Sans MS", 30))
+        self.text = customtkinter.CTkLabel(master=self, text=f"Итак, угадай число",
+                                           font=("Comic Sans MS", 30))
         self.text.pack(expand=True)
-        lives += 1
         self.frame = customtkinter.CTkFrame(self, fg_color="#303030")
         self.frame.pack(side="bottom", padx=70, pady=(50, 80))
         self.destroy_list.append(self.frame)
@@ -151,4 +150,3 @@ game = Window(btn_list)
 win, lose = logic()
 game.mod_1()
 game.mainloop()
-
