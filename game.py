@@ -1,9 +1,7 @@
-#TODO Добавить фон и музяку (в общем довести дизайн с беты до альфы)
-
 import random
-
 import customtkinter
 from CTkMessagebox import CTkMessagebox
+from pygame import mixer
 
 customtkinter.set_appearance_mode("Dark")
 
@@ -54,7 +52,8 @@ def main(scr, data):
         btn.configure(fg_color="green")
         scr.text.configure(text=f"Победа :D")
         msg = CTkMessagebox(title="Радостное окно)", message="Вы выиграли, хотите сыграть еще раз?",
-                            icon="question", option_1="Да", option_2="Нет", button_color="#303030")
+                            icon="question", option_1="Да", option_2="Нет", button_color="#303030",
+                            font=("Comic Sans MS", 13), button_hover_color="#2d622c")
         response = msg.get()
         if response == "Нет":
             scr.destroy()
@@ -67,7 +66,8 @@ def main(scr, data):
         btn.configure(fg_color="red")
         scr.text.configure(text=f"Ты проиграл(")
         msg = CTkMessagebox(title="Грустное окно(", message="Вы проиграли, хотите сыграть еще раз?",
-                            icon="question", option_1="Да", option_2="Нет", button_color="#303030")
+                            icon="question", option_1="Да", option_2="Нет", button_color="#303030",
+                            font=("Comic Sans MS", 13), button_hover_color="#cd311b")
         response = msg.get()
         if response == "Нет":
             scr.destroy()
@@ -85,7 +85,8 @@ def main(scr, data):
         scr.text.configure(text="Ты проиграл")
         msg = CTkMessagebox(title="Ни рыба, ни мясо окно :/", message="Вы конечно не выиграли, но и не проиграли."
                                                                       " Хотите сыграть еще раз?",
-                            icon="question", option_1="Да", option_2="Нет", button_color="#303030")
+                            icon="question", option_1="Да", option_2="Нет", button_color="#303030",
+                            font=("Comic Sans MS", 13), button_hover_color="#585858")
         response = msg.get()
         if response == "Нет":
             scr.destroy()
@@ -109,7 +110,7 @@ class Window(customtkinter.CTk):
                                            font=("Comic Sans MS", 30))
         self.text.pack(expand=True)
         self.frame = customtkinter.CTkFrame(self, fg_color="#303030")
-        self.frame.pack(side="bottom", padx=70, pady=(50, 80))
+        self.frame.pack(side="bottom", padx=50, pady=(45, 60))
         self.destroy_list.append(self.frame)
         self.destroy_list.append(self.text)
         row = 0
@@ -117,8 +118,8 @@ class Window(customtkinter.CTk):
         btns = {}
         for i in self.btn_list:
             btn_i = (customtkinter.CTkButton(master=self.frame, text=i, command=lambda x=i: main(self, int(x)),
-                                    font=("Comic Sans MS", 11), width=20,
-                                    fg_color="#484848", hover_color="#585858"))
+                                             font=("Comic Sans MS", 11), width=20,
+                                             fg_color="#484848", hover_color="#585858"))
             btns[int(i)] = btn_i
             btn_i.grid(row=row,column=column, pady=3, padx=5, ipady=5, ipadx=53 if int(i) < 10 else 50)
             column += 1
@@ -127,12 +128,15 @@ class Window(customtkinter.CTk):
                 row += 1
 
     def mod_1(self):
+        mixer.music.play(-1)
+
         self.title("Угадай число")
         self.geometry("800x600")
         text_1 = customtkinter.CTkLabel(master=self, text="Угадай число", font=("Comic Sans MS", 38))
         text_1.pack(expand=True)
 
-        btn_1 = customtkinter.CTkButton(master=self, text="Играть", font=("Comic Sans MS", 38), command=cmd)
+        btn_1 = customtkinter.CTkButton(master=self, text="Играть", font=("Comic Sans MS", 35), command=cmd,
+                                        fg_color="#484848", hover_color="#585858")
 
         btn_1.pack(expand=True)
         self.destroy_list = [text_1, btn_1]
@@ -144,9 +148,14 @@ def cmd():
         for i in game.destroy_list:
             i.destroy()
     game.mod_2()
+    mixer.music.load("lost_and_found.mp3")
+    mixer.music.play(-1)
 
 
 game = Window(btn_list)
 win, lose = logic()
+mixer.init()
+mixer.music.set_volume(0.3)
+mixer.music.load("missing_you.mp3")
 game.mod_1()
 game.mainloop()
