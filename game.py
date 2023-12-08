@@ -9,6 +9,8 @@ btn_list = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
             "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"]
 lives = 0
 
+sound_index = True
+
 
 def logic():
     numbers_list = [i for i in range(1, 21)]
@@ -143,19 +145,21 @@ class Window(customtkinter.CTk):
 
 
 def cmd():
-    global game
+    global game, sound_index
     if len(game.destroy_list) > 0:
         for i in game.destroy_list:
             i.destroy()
     game.mod_2()
-    mixer.music.load("lost_and_found.mp3")
-    mixer.music.play(-1)
+    if sound_index:
+        mixer.music.load("lost_and_found.mp3")
+        mixer.music.play(-1)
+    sound_index = False
 
 
 game = Window(btn_list)
 win, lose = logic()
 mixer.init()
-mixer.music.set_volume(0.3)
+mixer.music.set_volume(0.23)
 mixer.music.load("missing_you.mp3")
 game.mod_1()
 game.mainloop()
