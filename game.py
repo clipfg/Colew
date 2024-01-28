@@ -11,6 +11,9 @@ lives = 0
 
 sound_index = True
 
+ANSWER_CONSTS = ["Не угадал) попробуй найти", "Попытай удачи", "Есть идея!! Попробуй выбрать число",
+                 "Хмм... Может стоит искать", "*Секретно: попробуй"]
+
 
 def logic():
     numbers_list = [i for i in range(1, 21)]
@@ -44,7 +47,7 @@ def numbers_range(r):
 
 
 def main(scr, data):
-    global lives, win, lose, btns
+    global lives, win, lose, btns, ANSWER_CONSTS
 
     btn = btns[data]
 
@@ -80,7 +83,8 @@ def main(scr, data):
 
     else:
         btn.configure(state="disabled")
-        scr.text.configure(text=f"Не угадал) попробуй найти между {g} и {m}")
+        ans = random.choice(ANSWER_CONSTS)
+        scr.text.configure(text=f"{ans} между {g} и {m}")
 
     lives += 1
     if lives == 6:
